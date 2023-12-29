@@ -32,7 +32,7 @@ const rlc = (options) => {
             const data = await fetchData(urls[0], options);
 
             // create linkCardNode
-            const linkCardHtml = createLinkCard(data);
+            const linkCardHtml = createLinkCard(data, options);
             const linkCardNode = {
               type: 'html',
               value: linkCardHtml,
@@ -138,7 +138,7 @@ const fetchData = async (targetUrl, options) => {
   };
 };
 
-const createLinkCard = (data) => {
+const createLinkCard = (data, options) => {
   // create favicon element
   const faviconElement = data.faviconSrc
     ? `<img class="rlc-favicon" src="${data.faviconSrc}" alt="${data.title} favicon" width="16" height="16">`.trim()
@@ -155,10 +155,14 @@ const createLinkCard = (data) => {
       <img class="rlc-image" src="${data.ogImageSrc}" alt="${data.ogImageAlt}" />
     </div>`.trim()
     : '';
+  
+  const targetBlankAttribute = options.targetBlank
+    ? ' target="_blank" rel="noreferrer"'
+    : '';
 
   // create output HTML
   const outputHTML = `
-<a class="rlc-container" href="${data.url}">
+<a class="rlc-container" href="${data.url}"${targetBlankAttribute}>
   <div class="rlc-info">
     <div class="rlc-title">${data.title}</div>
     ${descriptionElement}
